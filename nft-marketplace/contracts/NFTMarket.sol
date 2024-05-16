@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counter.sol";
+
+// contract for mint, setting token uri, NFT owner...
+contract NFT is ERC721URIStorage {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+
+    constructor() ERC721("Gema NFTs", "Gema NFTs") {}
+
+    function createNFT(string calldata tokenURI) public returns(uint256) {
+        _tokenIds.increment();
+        uint256 currentID = _tokenIds.current();
+        _safeMint(msg.sender, currentID);
+        _setTokenURI(currentID, tokenURI);
+        return currentID;
+    }
+}
+
+// contract for buying, selling NFTs, listing NFTs, transfer ownership...
+contract NFTMarket {}
