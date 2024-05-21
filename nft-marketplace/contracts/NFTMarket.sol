@@ -10,14 +10,14 @@ contract NFT is ERC721URIStorage {
     constructor() ERC721("Gema NFTs", "Gema NFTs") {}
     
     // Need event in order to use Graph (for search,  pagination...) which uses events to build up database
-    event NFTTransferEvent(uint256 tokenID, address to, string tokenURI);
+    event NFTTransferEvent(uint256 tokenID, address from, address to, string tokenURI);
 
     // All actions that change the state return transaction
     function createNFT(string calldata tokenURI) public returns(uint256) {
         _ids++;
         _safeMint(msg.sender, _ids);
         _setTokenURI(_ids, tokenURI);
-        emit NFTTransferEvent(_ids, msg.sender, tokenURI);
+        emit NFTTransferEvent(_ids, address(0), msg.sender, tokenURI);
         return _ids;
     }
 }
@@ -38,7 +38,7 @@ contract NFTMarket is ERC721URIStorage {
     }
 
     // Need event in order to use Graph (for search,  pagination...) which uses events to build up database
-    event NFTTransferEvent(uint256 tokenID, address to, uint256 price);
+    event NFTTransferEvent(uint256 tokenID, address from, address to, uint256 price);
 
     // listNFT that you own for sale
     function listNFT(uint256 tokenID, uint256 price) public {
@@ -46,12 +46,10 @@ contract NFTMarket is ERC721URIStorage {
 
         // Only owner can transfer the ownership of token
         // If sender who initiated transaction is not owner of this token this will revert
-        approve(address(this), tokenID);
-
         transferFrom(msg.sender, address(this), tokenID);
         _listings[tokenID] = NFTListing(price, msg.sender);
 
-        emit NFTTransferEvent(tokenID, address(this), price);
+        emit NFTTransferEvent(tokenID, msg.sender, address(this), price);
     }
 
     // buyNFT that is listed for sale
@@ -62,24 +60,26 @@ contract NFTMarket is ERC721URIStorage {
 
         // Check that amount of 'money' sent is equal to price
         require(msg.value == listing.price, "NFTMarket: incorrect price");
-        transferFrom(address(this), msg.sender, tokenID);
+
+        // Calling the function on behalf of contract
+        ERC721(address(this)).transferFrom(address(this), msg.sender, tokenID);
         clearListing(tokenID);
 
         // We take % of NFT sell, rest stay on contract
-        payable(msg.sender).transfer(listing.price * 95 / 100);
+        payable(listing.seller).transfer(listing.price * 95 / 100);
 
-        emit NFTTransferEvent(tokenID, msg.sender, 0);
+        emit NFTTransferEvent(tokenID, address(this), msg.sender, 0);
     }
 
-    // cancelListing
+    // cancelListing cancell 
     function cancelListing(uint256 tokenID) public {
         // Check if token is listed to sale
         NFTListing memory listing = _listings[tokenID];
         require(listing.price > 0, "NFTMarket: NFT not listed for sale");
         require(listing.seller == msg.sender, "NFTMarket: You are not owner of this NFT");
-        transferFrom(address(this), msg.sender, tokenID);
+        ERC721(address(this)).transferFrom(address(this), msg.sender, tokenID);
         clearListing(tokenID);
-        emit NFTTransferEvent(tokenID, msg.sender, 0);
+        emit NFTTransferEvent(tokenID, address(this), msg.sender, 0);
     }
 
     function clearListing(uint256 tokenID) private {
@@ -92,6 +92,6 @@ contract NFTMarket is ERC721URIStorage {
         require(msg.sender == _owner, "NFTMarket: You are not owner of this contract");
         uint256 contractBalance = address(this).balance;
         require(contractBalance > 0, "NFTMarket: Contract balance is zero, cannot tranfer");
-        payable (msg.sender).transfer(contractBalance);
+        payable(msg.sender).transfer(contractBalance);
     }
 }
