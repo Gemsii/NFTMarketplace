@@ -1,5 +1,8 @@
-import { Dialog, DialogContent, DialogTitle, IconButton, Stack } from "@mui/material";
+import { Dialog, IconButton, Stack, Typography } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import useSigner from "../signer/signer-context";
+import { CreationValues } from "./NFT-creation-form";
+import NFTCreationForm from "./NFT-creation-form";
 
 interface MintNFTDialogProps {
     open: boolean;
@@ -8,6 +11,18 @@ interface MintNFTDialogProps {
 
 function MintNFTDialog(props: MintNFTDialogProps) {
     const { open, onClose} = props;
+    const {signer} = useSigner();
+
+    const onSubmit = async (values: CreationValues) => {
+        try {
+            onClose();
+            //await createNFT(values);
+            //toast.success("You'll see your new NFT here shortly. Refresh the page.");
+          } catch (e) {
+            //toast.warn("Something wrong!");
+            console.log(e);
+          }
+    }
 
     return (
       <Dialog open={open} onClose={onClose} fullScreen PaperProps={{ sx: { backgroundColor: '#1E1C21' }}}>
@@ -35,10 +50,16 @@ function MintNFTDialog(props: MintNFTDialogProps) {
                 <ArrowBackIcon sx={{color: '#ffffff'}}/>
             </IconButton>
         </Stack>
-        <DialogTitle>Full Screen Dialog</DialogTitle>
-        <DialogContent>
-          <p>This is the content of the full screen dialog.</p>
-        </DialogContent>
+        {
+            signer ? (
+                <Stack sx={{paddingInline: '9rem', paddingTop: '2rem'}}>
+                    <NFTCreationForm onSubmit={onSubmit}/>
+                </Stack>
+            ) : 
+            (
+                <Typography>Connect your wallet</Typography>
+            )
+        }       
       </Dialog>
     );
 }
