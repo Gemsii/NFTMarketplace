@@ -7,14 +7,45 @@ import {
 } from "@mui/material";
 import WalletIcon from '@mui/icons-material/Wallet';
 import useSigner from "../signer/signer-context";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import MintNFTDialog from "../mint-nft-dialog/mint-nft-dialog";
 
 function NavBar() {
+    const navigate = useNavigate();
     const {signer, address, connectWallet} = useSigner();
+    //const [balance, setBalance] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
-    const handleChangePage = (event: React.MouseEvent<HTMLElement>) => {
-        console.log(event)
-        return;           
+    const handleChangePage = (page: string) => {
+        navigate(page);          
     };
+
+    // useEffect(() => {
+    //     const fetchBalance = async () => {
+    //         if (signer && address) {
+    //           try {
+    //             const balance = await signer?.getBalance(address);
+    //             console.log(typeof balance)
+    //             console.log(balance)
+    //           } catch (error) {
+    //             console.error('Error fetching balance:', error);
+    //           }
+    //         }
+    //       };
+      
+    //       fetchBalance();
+    // }, [signer, address])
+
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+    
 
     return (
         <AppBar
@@ -47,38 +78,40 @@ function NavBar() {
                 <Stack flexDirection={'row'} gap={3} flexGrow={1} justifyContent={'center'}>
                         <Button
                             key={'Home'}
-                            onClick={(e) => handleChangePage(e)}
+                            onClick={() => handleChangePage('/')}
                             sx={{ my: 2, color: 'white', display: 'block', '&:hover': { backgroundColor: '#1E1C21' } }}
                         >
                             <Typography textAlign="center" sx={{color: '#ffffff', textTransform: 'none', fontSize: '14px'}}>Explore</Typography>
                         </Button>
                         <Button
                             key={'Owned'}
-                            onClick={(e) => handleChangePage(e)}
+                            onClick={() => handleChangePage('/MyCollection')}
                             sx={{ my: 2, color: 'white', display: 'block', '&:hover': { backgroundColor: '#1E1C21' } }}
                         >
                             <Typography textAlign="center" sx={{color: '#ffffff', textTransform: 'none', fontSize: '14px'}}>My Collection</Typography>
                         </Button>
                 </Stack>               
                 <Stack>
-                    <Button sx={{ '&:hover': { backgroundColor: '#883099' }, textTransform: 'none', backgroundColor: '#E350FF', borderRadius: '5px', paddingInline: '16px', height: '30px' }}>   
+                    <Button onClick={handleOpenDialog} sx={{ '&:hover': { backgroundColor: '#883099' }, textTransform: 'none', backgroundColor: '#E350FF', borderRadius: '5px', paddingInline: '16px', height: '30px' }}>   
                         <Typography variant="body1" textAlign="center" sx={{color: '#ffffff', textTransform: 'none', fontWeight: '500', fontSize: '14px'}}>Create</Typography>
                     </Button>
                 </Stack>
-                <Stack ml={1} mr={1}>
+                <Stack mr={1}>
                     {address ? 
                     (
-                        <Stack>
+                        <Stack alignItems={'center'} justifyContent={'center'} flexDirection={'row'} gap={1} sx={{  height: '30px', borderRadius: '5px', backgroundColor: 'rgba(255, 255, 255, 0.5)', paddingInline: '10px'}}>
                             <WalletIcon sx={{color: '#ffffff'}}/>
+                            <Typography sx={{color: '#ffffff', fontSize: '12px', lineHeight: 0}}>ETH</Typography>
                         </Stack>
                     ) : 
                     (
-                        <Button onClick={connectWallet} sx={{ '&:hover': { backgroundColor: '#883099' }, textTransform: 'none',  border: '2px solid #E350FF', borderRadius: '18px', paddingInline: '16px', height: '30px' }}>
+                        <Button onClick={connectWallet} sx={{ '&:hover': { backgroundColor: '#883099' }, textTransform: 'none',  border: '2px solid #E350FF', borderRadius: '5px', paddingInline: '16px', height: '30px' }}>
                             <Typography variant="body1" textAlign="center" sx={{color: '#E350FF', textTransform: 'none', fontWeight: '500', fontSize: '14px'}}>Connect wallet</Typography>                    
                         </Button>
                     )}                   
                 </Stack>
             </Toolbar>
+            <MintNFTDialog open={openDialog} onClose={handleCloseDialog} />
         </AppBar>
   );
 }
