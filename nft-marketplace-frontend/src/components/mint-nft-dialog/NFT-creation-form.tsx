@@ -38,8 +38,9 @@ const NFTCreationForm = ({ onSubmit }: NFTCreationFormProps) => {
       if (!values.name) {
         newErrors.name = 'Must enter a name';
       }
-      if (!values.description) {
-        newErrors.description = 'Must enter a description';
+
+      if (!values.image) {
+        newErrors.image = 'Must upload new NFT';
       }
   
       if (Object.keys(newErrors).length > 0) {
@@ -139,6 +140,7 @@ const NFTCreationForm = ({ onSubmit }: NFTCreationFormProps) => {
                         placeholder="Description..."
                     />
                     {errors.name && <Typography sx={{color: '#E350FF'}}>{errors.name}</Typography>}
+                    {errors.image && <Typography sx={{color: '#E350FF'}}>{errors.image}</Typography>}
                     <Button type="submit" sx={{ '&:hover': { backgroundColor: '#883099' }, textTransform: 'none', backgroundColor: '#E350FF', borderRadius: '5px', paddingInline: '16px', height: '40px', color: '#ffffff',width: '8rem', alignSelf: 'flex-end' }}>
                         Create NFT
                     </Button>
