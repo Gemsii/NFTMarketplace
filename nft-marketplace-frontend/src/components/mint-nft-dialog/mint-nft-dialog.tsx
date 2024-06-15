@@ -6,6 +6,8 @@ import NFTCreationForm from "./NFT-creation-form";
 import useNFTMarket from "../../hooks/nft-market";
 import { useState } from "react";
 
+const GATEWAY_DOMAIN= 'https://lavender-manual-coral-936.mypinata.cloud'
+
 interface MintNFTDialogProps {
     open: boolean;
     onClose: () => void;
@@ -18,36 +20,10 @@ function MintNFTDialog(props: MintNFTDialogProps) {
     const [cid, setCid] = useState();
 
     const onSubmit = async (values: CreationValues) => {
-        try {
-          const formData = new FormData();
-          formData.append("file", values.image!);
-          const metadata = JSON.stringify({
-            name: values.name,
-          });
-          formData.append("pinataMetadata", metadata);
-    
-          const options = JSON.stringify({
-            cidVersion: 0,
-          });
-          formData.append("pinataOptions", options);
-    
-          const res = await fetch(
-            "https://api.pinata.cloud/pinning/pinFileToIPFS",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJjNjFkODk3Zi02NDZmLTQxOWMtYjI1Ny03Njc5YmQwYmJhYTgiLCJlbWFpbCI6ImdlbW92aWN0YXRqYW5hQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfSx7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJjMjVhYmVkNDI1MTJkMDI5ZWIzNiIsInNjb3BlZEtleVNlY3JldCI6IjRhMmNmMGE3OWNjNzMwNDdiZDc0MzEwYzM5NjA2ODViNjZlOTE2Y2FkYWZiYzEzMGIzYjM4ODU0ODVjZDk1MTYiLCJpYXQiOjE3MTgzOTYxNjR9.xzMQzjkoX-Fsisc2hdOMFMWQa6uDZ0ZPJ8n71rPb0p4`,
-              },
-              body: formData,
-            }
-          );
-          const resData = await res.json();
-          setCid(resData.IpfsHash);
-          console.log(resData);
-          //onClose();
-        } catch (error) {
-          console.log(error);
-        }
+        var cId = await createNFT(values);
+        console.log(cId);
+        setCid(cId);
+        //onClose();
       };
 
     return (
@@ -88,7 +64,7 @@ function MintNFTDialog(props: MintNFTDialogProps) {
         }       
         {/* {cid && (
             <img
-            src={`https://lavender-manual-coral-936.mypinata.cloud/ipfs/${cid}`}
+            src={`${GATEWAY_DOMAIN}/ipfs/${cid}`}
             alt="ipfs image"
             />
         )} */}
