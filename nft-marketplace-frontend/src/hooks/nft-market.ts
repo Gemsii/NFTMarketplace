@@ -6,6 +6,8 @@ import NFT_MARKET from '../contracts/NFTMarket.sol/NFT.json'
 
 const PIN_URL = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
 const NFT_ADDRESS= '0xE8523B32F2d23dBF5De4D0B0245884e2a1b4f0C0'
+const GATEWAY_DOMAIN= 'https://lavender-manual-coral-936.mypinata.cloud'
+
 
 const useNFTMarket = () => {
     const {signer } = useSigner();
@@ -38,7 +40,7 @@ const useNFTMarket = () => {
             );
             const resData = await res.json();
 
-            const transaction: TransactionResponse = await nftMarket.createNFT(resData.IpfsHash);
+            const transaction: TransactionResponse = await nftMarket.createNFT(`https://ipfs.io/ipfs/${resData.IpfsHash}`);
             console.log(transaction);      
 
             return resData.IpfsHash;
