@@ -24,8 +24,10 @@
     "nft.storage": "^7.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-draggable": "^4.4.6",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-zoom-pan-pinch": "^3.5.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
     "web3modal": "^1.9.12"
