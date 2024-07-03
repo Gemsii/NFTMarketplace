@@ -1,11 +1,9 @@
-type NFTTransferEvent @entity(immutable: true) {
-  id: Bytes!
-  tokenAddress: Bytes! # address
-  tokenID: BigInt! # uint256
-  from: Bytes! # address
-  to: Bytes! # address
-  price: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type NFT @entity {
+  id: String! #mix of tokenaddress and tokenid
+  tokenAddress: Bytes!
+  tokenID: BigInt!
+  from: Bytes!
+  to: Bytes!
+  price: BigInt!
+  tokenURI: String!
 }

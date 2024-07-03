@@ -3,6 +3,9 @@
     "NFTMarket": {
       "address": "0x18C1481f4533acfdf2D36A495C9a342754A3795c",
       "startBlock": 6233498
+    },
+    "NFT": {
+      "address": "0xE8523B32F2d23dBF5De4D0B0245884e2a1b4f0C0"
     }
   }
 }
