@@ -1,24 +1,19 @@
-import { NFT } from "../generated/schema"
-import {
-  NFTMarket,
-  NFTTransferEvent,
-} from "../generated/NFTMarket/NFTMarket"
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import { NFTTransferEvent as NFTTransferEventEvent } from "../generated/NFTMarket/NFTMarket"
+import { NFTTransferEvent } from "../generated/schema"
 
-export function handleNFTTransferEvent(event: NFTTransferEvent): void {
-  let nft = new NFT(
-    event.params.tokenID.toString()
+export function handleNFTTransferEvent(event: NFTTransferEventEvent): void {
+  let entity = new NFTTransferEvent(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  nft.tokenAddress = event.params.tokenAddress
-  nft.to = event.params.to;
-  nft.from = event.params.from;
-  nft.price = event.params.price;
+  entity.tokenAddress = event.params.tokenAddress
+  entity.tokenID = event.params.tokenID
+  entity.from = event.params.from
+  entity.to = event.params.to
+  entity.price = event.params.price
 
-  //const nftMarket = NFTMarket.bind(event.address);
-  //const tokenURI = nftMarket.tokenURI(event.params.tokenID);
-  const tokenURI = IERC721(event.params.tokenAddress).tokenURI(event.params.tokenID);
-  
-  nft.tokenURI = tokenURI;
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
 
-  nft.save()
+  entity.save()
 }
