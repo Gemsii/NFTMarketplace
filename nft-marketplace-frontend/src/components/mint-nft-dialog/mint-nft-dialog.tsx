@@ -24,7 +24,7 @@ function MintNFTDialog(props: MintNFTDialogProps) {
         console.log(cId);
         setCid(cId);
         //onClose();
-      };
+    };
 
     return (
       <Dialog open={open} onClose={onClose} fullScreen PaperProps={{ sx: { backgroundColor: '#1E1C21' }}}>
@@ -62,12 +62,6 @@ function MintNFTDialog(props: MintNFTDialogProps) {
                 <Typography>Connect your wallet</Typography>
             )
         }       
-        {/* {cid && (
-            <img
-            src={`${GATEWAY_DOMAIN}/ipfs/${cid}`}
-            alt="ipfs image"
-            />
-        )} */}
       </Dialog>
     );
 }

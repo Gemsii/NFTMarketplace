@@ -1,11 +1,18 @@
 import { Card, CardMedia, CardContent, Stack, Typography, Button } from "@mui/material";
 import { OwnedNft } from "alchemy-sdk";
 
+export type NFT = {
+  tokenUri: string;
+  tokenId: string;
+  price: number;
+  tokenAddress: string;
+}
+
 interface NFTCardProps {
-    nft: OwnedNft;
+    nft: OwnedNft | NFT;
     key: number;
-    onBuyClick?: (nft: OwnedNft) => void;
-    onListClick?: () => void;
+    onBuyClick?: (nft: NFT) => void;
+    onListClick?: (nft: OwnedNft) => void;
 }
 
 function NFTCard(props: Readonly<NFTCardProps>) {
@@ -21,22 +28,22 @@ function NFTCard(props: Readonly<NFTCardProps>) {
               <CardContent sx={{height: '4.5rem', paddingBlock: '0px'}}>
                 <Stack>
                   <Stack alignItems={'flex-start'} marginTop={'-0.2rem'}>
-                    <Typography sx={{lineHeight: '24px', fontSize: '16px', color: '#ffffff'}}>Creature #{key}</Typography>
+                    <Typography sx={{lineHeight: '24px', fontSize: '16px', color: '#ffffff'}}>Creature #{nft.tokenId}</Typography>
                   </Stack>
-                  <Stack alignItems={'flex-start'} flexDirection={'row'} paddingTop={'0.7rem'}>
-                    <Stack flexGrow={1}>
+                  <Stack alignItems={'flex-start'} flexDirection={'row'} paddingTop={'0.7rem'} gap={2}>
+                    <Stack flexGrow={1} minWidth={0}>
                       {props.onBuyClick && (
                         <>
                             <Typography sx={{display: 'flex', lineHeight: '15px', fontSize: '12px', color: 'rgba(255, 255, 255, 0.3)'}}>Current price:</Typography>
-                            <Typography sx={{display: 'flex', lineHeight: '22px', fontSize: '16px', fontWeight: '600', background: 'linear-gradient(90deg, #E350FF 0%, #883099 100%)', WebkitBackgroundClip: 'text',WebkitTextFillColor: 'transparent'}}>14 ETH</Typography>
+                            {(nft as NFT)?.price && (<Typography sx={{display: 'flex', lineHeight: '22px', fontSize: '16px', fontWeight: '600', background: 'linear-gradient(90deg, #E350FF 0%, #883099 100%)', WebkitBackgroundClip: 'text',WebkitTextFillColor: 'transparent', width:'120px'}}>{(nft as NFT)?.price}</Typography>)}
                         </>
                       )}
                     </Stack>
                     {props.onBuyClick && (
-                        <Button onClick={() => props.onBuyClick && props.onBuyClick(props.nft)} sx={{border: '1px solid #883099', borderRadius: '5px', width: '85px', height: '35px', color: '#E350FF', textTransform: 'none'}}>Buy now</Button>
+                        <Button onClick={() => props.onBuyClick && props.onBuyClick(props.nft as NFT)} sx={{border: '1px solid #883099', borderRadius: '5px', width: '85px', height: '35px', color: '#FFFFFF', textTransform: 'none'}}>Buy now</Button>
                     )}
                     {props.onListClick && (
-                        <Button onClick={props.onListClick} sx={{border: '1px solid #883099', borderRadius: '5px', width: '90px', height: '35px', color: '#E350FF', textTransform: 'none'}}>List NFT</Button>
+                        <Button onClick={() => props.onListClick && props.onListClick(props.nft as OwnedNft)} sx={{border: '1px solid #883099', borderRadius: '5px', width: '90px', height: '35px', color: '#FFFFFF', textTransform: 'none'}}>List NFT</Button>
                     )}
                   </Stack>
                 </Stack>
