@@ -4,6 +4,7 @@ import useSigner from "../signer/signer-context";
 import { useEffect, useState } from "react";
 import NFTCard from "../nft-card/nft-card";
 import CloseIcon from '@mui/icons-material/Close';
+import useNFTMarketplace from "../../hooks/nft-marketplace";
 const settings = {
   apiKey: "rjq215KiFGI__m7O_iy9i5I7Ah7JUs4j",
   network: Network.ETH_SEPOLIA,
@@ -16,6 +17,8 @@ function CollectionContainer() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState<OwnedNft | null>(null);
     const [priceValue, setPriceValue] = useState<number>(0);
+    const { listNFT } = useNFTMarketplace();
+
     
     useEffect(() => {
         const getOwnersNFTs = async () => {
@@ -36,9 +39,12 @@ function CollectionContainer() {
     }
 
     const onSubmit = async () => {
-      // Call list function from contract
-      setSelectedNFT(null);
-      setPriceValue(0);
+        if(selectedNFT !== null){
+            console.log(selectedNFT)
+            await listNFT(selectedNFT.contract.address, selectedNFT.tokenId, priceValue);
+            setSelectedNFT(null);
+            setPriceValue(0);
+        }
     };
 
     const handleChangePrice = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

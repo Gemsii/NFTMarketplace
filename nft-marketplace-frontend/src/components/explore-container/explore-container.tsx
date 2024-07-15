@@ -12,17 +12,17 @@ function ExploreContainer() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ query: `
-                {
-                    nfts(first: 5) {
-                        id
-                        tokenAddress
-                        tokenID
-                        from
-                        to
-                        price
-                        tokenURI
-                    }
+            {
+                nfts(first: 5, where: { to: "0x18C1481f4533acfdf2D36A495C9a342754A3795c"} ) {
+                    id
+                    tokenAddress
+                    tokenID
+                    from
+                    to
+                    price
+                    tokenURI
                 }
+            }
             ` }),
         });
 
