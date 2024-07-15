@@ -1,4 +1,4 @@
-import { Contract, Signer } from "ethers";
+import { Contract, ethers, Signer } from "ethers";
 import useSigner from "../components/signer/signer-context";
 import { TransactionResponse } from "@ethersproject/providers";
 import NFT_MARKETPLACE from '../contracts/NFTMarket.sol/NFTMarket.json'
@@ -18,16 +18,34 @@ const useNFTMarketplace = () => {
             const transaction: TransactionResponse = await nftMarket.approve(NFT_MARKET_ADDRESS, tokenId);
             transaction.wait();
 
-            const transaction2: TransactionResponse = await nftMarketplace.listNFT(tokenAddress, tokenId, price);
-            console.log(transaction2);      
-
-            //return resData.IpfsHash;
+            const transaction2: TransactionResponse = await nftMarketplace.listNFT(tokenAddress, tokenId, ethers.parseEther(price.toString()));
+            transaction2.wait();
           } catch (error) {
             console.log(error);
           }  
     }
 
-    return {listNFT};
+    // buyNFT(address tokenAddress, uint tokenID)
+    const buyNFT = async (tokenAddress: string, tokenId: string, price: number) => {
+        try {
+            const transaction: TransactionResponse = await nftMarketplace.buyNFT(tokenAddress, tokenId, {value: price.toString()});
+            transaction.wait();
+          } catch (error) {
+            console.log(error);
+          }  
+    }
+
+    // cancelListing(address tokenAddress, uint256 tokenID)
+    const cancelListNFT = async (tokenAddress: string, tokenId: string) => {
+        try {
+            const transaction: TransactionResponse = await nftMarketplace.cancelListing(tokenAddress, tokenId);
+            transaction.wait();
+          } catch (error) {
+            console.log(error);
+          }
+    }
+
+    return {listNFT, buyNFT, cancelListNFT};
 }
 
 export default useNFTMarketplace;

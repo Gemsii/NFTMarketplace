@@ -4,9 +4,6 @@ import useSigner from "../signer/signer-context";
 import { CreationValues } from "./NFT-creation-form";
 import NFTCreationForm from "./NFT-creation-form";
 import useNFTMarket from "../../hooks/nft-market";
-import { useState } from "react";
-
-const GATEWAY_DOMAIN= 'https://lavender-manual-coral-936.mypinata.cloud'
 
 interface MintNFTDialogProps {
     open: boolean;
@@ -17,13 +14,9 @@ function MintNFTDialog(props: MintNFTDialogProps) {
     const { open, onClose} = props;
     const {signer} = useSigner();
     const { createNFT } = useNFTMarket();
-    const [cid, setCid] = useState();
 
     const onSubmit = async (values: CreationValues) => {
-        var cId = await createNFT(values);
-        console.log(cId);
-        setCid(cId);
-        //onClose();
+        await createNFT(values);
     };
 
     return (
