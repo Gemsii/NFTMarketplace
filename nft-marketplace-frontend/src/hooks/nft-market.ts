@@ -1,7 +1,6 @@
 import { Contract, Signer } from "ethers";
 import { CreationValues } from "../components/mint-nft-dialog/NFT-creation-form";
 import useSigner from "../components/signer/signer-context";
-import { TransactionResponse } from "@ethersproject/providers";
 import NFT_MARKET from '../contracts/NFTMarket.sol/NFT.json'
 
 const PIN_URL = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
@@ -39,8 +38,10 @@ const useNFTMarket = () => {
             );
             const resData = await res.json();
 
-            const transaction: TransactionResponse = await nftMarket.createNFT(`https://ipfs.io/ipfs/${resData.IpfsHash}`);
+            const transaction = await nftMarket.createNFT(`https://ipfs.io/ipfs/${resData.IpfsHash}`);
             await transaction.wait();  
+            console.log("NFT create successfully");
+            return;
           } catch (error) {
             console.log(error);
           }  

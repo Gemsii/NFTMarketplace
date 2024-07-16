@@ -17,6 +17,7 @@ function MintNFTDialog(props: MintNFTDialogProps) {
 
     const onSubmit = async (values: CreationValues) => {
         await createNFT(values);
+        props.onClose();
     };
 
     return (

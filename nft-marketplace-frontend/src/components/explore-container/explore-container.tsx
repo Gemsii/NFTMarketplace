@@ -51,8 +51,10 @@ function ExploreContainer() {
     };
 
     useEffect(() => {
+      if(address){
         fetchNFTs()   
-    }, [])
+      }
+    }, [address])
 
     const handleOnBuyNFT = async (nft: any) => {
         await buyNFT(nft.tokenAddress, nft.tokenId, nft.price);

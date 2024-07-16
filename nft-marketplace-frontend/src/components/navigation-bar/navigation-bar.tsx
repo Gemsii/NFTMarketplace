@@ -13,29 +13,12 @@ import MintNFTDialog from "../mint-nft-dialog/mint-nft-dialog";
 
 function NavBar() {
     const navigate = useNavigate();
-    const {signer, address, connectWallet} = useSigner();
-    //const [balance, setBalance] = useState(null);
+    const {address, connectWallet} = useSigner();
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleChangePage = (page: string) => {
         navigate(page);          
     };
-
-    // useEffect(() => {
-    //     const fetchBalance = async () => {
-    //         if (signer && address) {
-    //           try {
-    //             const balance = await signer?.getBalance(address);
-    //             console.log(typeof balance)
-    //             console.log(balance)
-    //           } catch (error) {
-    //             console.error('Error fetching balance:', error);
-    //           }
-    //         }
-    //       };
-      
-    //       fetchBalance();
-    // }, [signer, address])
 
 
     const handleOpenDialog = () => {
@@ -44,6 +27,7 @@ function NavBar() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        window.location.reload();
     };
     
 

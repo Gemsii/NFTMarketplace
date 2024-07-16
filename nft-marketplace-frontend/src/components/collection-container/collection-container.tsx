@@ -1,4 +1,4 @@
-import { Button, Dialog, Grid, IconButton, Stack, TextField, Typography } from "@mui/material";
+import { Button, Dialog, Divider, Grid, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { Network, Alchemy, OwnedNft } from 'alchemy-sdk';
 import useSigner from "../signer/signer-context";
 import { useEffect, useState } from "react";
@@ -100,10 +100,11 @@ function CollectionContainer() {
     
     return (
       <>
-        <Stack flexDirection={'column'} gap={3} sx={{paddingTop: '2rem'}}>
+        <Stack flexDirection={'column'} gap={2} sx={{paddingTop: '2rem'}}>
             <Typography sx={{color: '#ffffff', textTransform: 'none', fontWeight: '600', fontSize: '24px', paddingTop: '2rem'}}>                   
                 My Collection
             </Typography>
+            <Divider sx={{color: '#FFFFFF', border: '1px solid', width: '55rem', alignSelf: 'center'}}/>
             <Grid container alignSelf={'center'} spacing={3} sx={{paddingInline: '10rem', paddingTop: '1rem', width: '90rem'}}>
                 {nfts?.map((nft, index) => (
                     <Grid item key={index} xs={3}>
@@ -111,9 +112,10 @@ function CollectionContainer() {
                     </Grid>            
                 ))}
             </Grid>                
-            <Typography sx={{color: '#ffffff', textTransform: 'none', fontWeight: '600', fontSize: '24px', paddingTop: '2rem'}}>                   
+            <Typography sx={{color: '#ffffff', textTransform: 'none', fontWeight: '600', fontSize: '24px', paddingTop: '3rem'}}>                   
                 Listed
             </Typography>
+            <Divider sx={{color: '#FFFFFF', border: '1px solid', width: '55rem', alignSelf: 'center'}}/>
             <Grid container alignSelf={'center'} spacing={3} sx={{paddingInline: '10rem', paddingTop: '1rem', paddingBottom: '1rem', width: '90rem'}}>
                 {listedNFs?.map((nft, index) => (
                     <Grid item key={index} xs={3}>

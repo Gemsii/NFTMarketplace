@@ -1,4 +1,4 @@
-import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
+import { BrowserProvider, JsonRpcSigner } from "ethers";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import Web3Modal from "web3modal";
 
@@ -29,8 +29,8 @@ export const SignerProvider = ({children}: {children: ReactNode}) => {
         try {
             const web3modal = new Web3Modal({cacheProvider: true});
             const instance = await web3modal.connect();
-            const provider = new Web3Provider(instance);
-            const signer = provider.getSigner();
+            const provider = new BrowserProvider(instance);
+            const signer = await provider.getSigner();
             setSigner(signer);
             const address = await signer.getAddress();
             setAddress(address);

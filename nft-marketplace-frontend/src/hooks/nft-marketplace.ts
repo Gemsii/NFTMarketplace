@@ -1,6 +1,5 @@
 import { Contract, ethers, Signer } from "ethers";
 import useSigner from "../components/signer/signer-context";
-import { TransactionResponse } from "@ethersproject/providers";
 import NFT_MARKETPLACE from '../contracts/NFTMarket.sol/NFTMarket.json'
 import NFT from '../contracts/NFTMarket.sol/NFT.json'
 
@@ -15,10 +14,10 @@ const useNFTMarketplace = () => {
     const listNFT = async (tokenAddress: string, tokenId: string, price: number) => {
         try {
             const nftMarket = new Contract(tokenAddress, NFT.abi, signer as unknown as Signer);
-            const transaction: TransactionResponse = await nftMarket.approve(NFT_MARKET_ADDRESS, tokenId);
+            const transaction = await nftMarket.approve(NFT_MARKET_ADDRESS, tokenId);
             transaction.wait();
 
-            const transaction2: TransactionResponse = await nftMarketplace.listNFT(tokenAddress, tokenId, ethers.parseEther(price.toString()));
+            const transaction2 = await nftMarketplace.listNFT(tokenAddress, tokenId, ethers.parseEther(price.toString()));
             transaction2.wait();
           } catch (error) {
             console.log(error);
@@ -28,7 +27,7 @@ const useNFTMarketplace = () => {
     // buyNFT(address tokenAddress, uint tokenID)
     const buyNFT = async (tokenAddress: string, tokenId: string, price: number) => {
         try {
-            const transaction: TransactionResponse = await nftMarketplace.buyNFT(tokenAddress, tokenId, {value: price.toString()});
+            const transaction = await nftMarketplace.buyNFT(tokenAddress, tokenId, {value: price.toString()});
             transaction.wait();
           } catch (error) {
             console.log(error);
@@ -38,7 +37,7 @@ const useNFTMarketplace = () => {
     // cancelListing(address tokenAddress, uint256 tokenID)
     const cancelListNFT = async (tokenAddress: string, tokenId: string) => {
         try {
-            const transaction: TransactionResponse = await nftMarketplace.cancelListing(tokenAddress, tokenId);
+            const transaction = await nftMarketplace.cancelListing(tokenAddress, tokenId);
             transaction.wait();
           } catch (error) {
             console.log(error);
